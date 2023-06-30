@@ -7,7 +7,7 @@
 ## Build
 
 Run
-`cmake -G Ninja -B "/build"`
+`cmake -G Ninja -B "./build"`
 `cd build && ninja`
 
 Now you should be able to run `pd-engine.exe`
