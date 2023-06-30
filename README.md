@@ -1,8 +1,8 @@
 # pd-engine
 
 ## Dependencies
-Cmake
-Ninja
+* Cmake
+* Ninja
 
 ## Build
 
