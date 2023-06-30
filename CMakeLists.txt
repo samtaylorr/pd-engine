@@ -16,6 +16,7 @@ add_subdirectory(lib/glfw)                       # Build the GLFW project to use
 include_directories(
     lib/glfw/include
     lib/glad/include
+    include/
 )
 
 target_link_libraries(${PROJECT_NAME} glfw)
