@@ -11,3 +11,5 @@ Run
 `cd build && ninja`
 
 Now you should be able to run `pd-engine.exe`
+
+Alternatively, you can run b.bat (and in vim use !:b)
