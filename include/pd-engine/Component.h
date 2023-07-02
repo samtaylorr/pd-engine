@@ -1,8 +1,5 @@
-#ifndef COMPONENT_H
-#define GAMEOBJECT_H
+#pragma once
 
-#include <glm/ext.hpp>
-#include <glad/glad.h>
 #include <iostream>
 #include <string>
 
@@ -14,11 +11,11 @@ public:
   Component &operator=(Component &&) = default;
   Component &operator=(const Component &) = default;
   ~Component();
-  void run();
   std::string getName();
+  void Awake(){};
+  void Update(){};
 
 private:
   std::string name;
 };
 
-#endif

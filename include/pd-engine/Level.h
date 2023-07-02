@@ -7,7 +7,7 @@
 
 class Level {
 public:
-  Level();
+  Level(){};
   Level(Level &&) = default;
   Level(const Level &) = default;
   Level &operator=(Level &&) = default;
@@ -15,6 +15,8 @@ public:
   ~Level();
   void AddGameObject(GameObject* go);
   std::vector<GameObject*> GameObjects();
+  void Awake();
+  void Update();
 
 private:
   std::vector<GameObject*> gameObjects;

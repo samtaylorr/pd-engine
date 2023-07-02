@@ -2,8 +2,8 @@
 
 #include <string>
 #include <unordered_map>
-
-#include "glm/glm.hpp"
+#include <glm/ext.hpp>
+#include "Debug.h"
 
 struct ShaderProgramSource
 {

@@ -1,5 +1,4 @@
 #include "pd-engine/VertexArray.h"
-#include "pd-engine/Debug.h"
 
 VertexArray::VertexArray()
 {

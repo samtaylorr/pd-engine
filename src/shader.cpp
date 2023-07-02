@@ -1,6 +1,4 @@
-#include "pd-engine/Renderer.h"
-#include "pd-engine/Shader.h"
-
+#include "pd-engine/Shader.h" 
 #include <iostream>
 #include <string>
 #include <fstream>

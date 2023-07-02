@@ -1,22 +1,7 @@
-// Third party libraries
-#include "glm/glm.hpp"
-#include "glm/gtc/matrix_transform.hpp"
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
+#include <pd-engine/pd.h>
 
-// pd-engine includes
-#include "pd-engine/Shader.h"
-#include "pd-engine/Renderer.h"
-#include "pd-engine/VertexBuffer.h"
-#include "pd-engine/VertexArray.h"
-#include "pd-engine/IndexBuffer.h"
-#include "pd-engine/Texture.h"
-#include "pd-engine/Level.h"
 // Standard libraries
 #include <iostream>
-
-#define STB_IMAGE_IMPLEMENTATION
-#include "pd-engine/stb_image.h"
 
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
@@ -28,11 +13,11 @@ void processInput(GLFWwindow *window);
 
 // Global variables
 
-// set up camera 
+// set up camera
 glm::vec3 cameraPos      = glm::vec3(0.0f, 0.0f,  3.0f);
 glm::vec3 cameraFront    = glm::vec3(0.0f, 0.0f, -1.0f);
 glm::vec3 cameraUp       = glm::vec3(0.0f, 1.0f,  0.0f);
-		
+
 // time variables
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
@@ -71,7 +56,7 @@ GLFWwindow* InitWindow()
 
 		// Set callbacks
 		glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
-		glfwSetCursorPosCallback(window, mouse_callback);
+		//glfwSetCursorPosCallback(window, mouse_callback);
 		
 		// Disable cursor
 		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
@@ -107,6 +92,9 @@ int main( void )
     
     mainCamera->AddComponent(camera);
     mainLevel->AddGameObject(mainCamera);
+
+    // This is where we run all of the Awake() functions
+    mainLevel->Awake();
 
     float positions[] = {
         -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
@@ -202,10 +190,13 @@ int main( void )
         		lastFrame = currentFrame;
 						
 						// Input
-						processInput(window);
+						// processInput(window);
 
 						GLCall( glClearColor(0.2f, 0.3f, 0.3, 1.0f) );
             renderer.Clear();
+
+            // Update()
+            mainLevel->Update();
 
 						texture1.Bind(0);
 						texture2.Bind(1);
@@ -247,67 +238,67 @@ int main( void )
 
 // process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
 // ---------------------------------------------------------------------------------------------------------
-void processInput(GLFWwindow *window)
-{
-    const float speed = 2.5f * deltaTime;
-
-    if(glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-    {
-      cameraPos += speed * cameraFront;
-    }
-
-    if(glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-    {
-      cameraPos -= speed * cameraFront;
-    }
-
-    if(glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-    {
-      cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * speed;
-    }
-
-    if(glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-    {
-      cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * speed;
-    }
-
-    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-        glfwSetWindowShouldClose(window, true);
-}
-
-// uses mouse to control camera
-void mouse_callback(GLFWwindow* window, double xpos, double ypos)
-{
-    if (firstMouse)
-    {
-        lastX = xpos;
-        lastY = ypos;
-        firstMouse = false;
-    }
-  
-    float xoffset = xpos - lastX;
-    float yoffset = lastY - ypos; 
-    lastX = xpos;
-    lastY = ypos;
-
-    float sensitivity = 0.1f;
-    xoffset *= sensitivity;
-    yoffset *= sensitivity;
-
-    yaw   += xoffset;
-    pitch += yoffset;
-
-    if(pitch > 89.0f)
-        pitch = 89.0f;
-    if(pitch < -89.0f)
-        pitch = -89.0f;
-
-    glm::vec3 direction;
-    direction.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
-    direction.y = sin(glm::radians(pitch));
-    direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
-    cameraFront = glm::normalize(direction);
-} 
+// void processInput(GLFWwindow *window)
+// {
+//     const float speed = 2.5f * deltaTime;
+// 
+//     if(glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+//     {
+//       cameraPos += speed * cameraFront;
+//     }
+// 
+//     if(glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+//     {
+//       cameraPos -= speed * cameraFront;
+//     }
+// 
+//     if(glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+//     {
+//       cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * speed;
+//     }
+// 
+//     if(glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+//     {
+//       cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * speed;
+//     }
+// 
+//     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+//         glfwSetWindowShouldClose(window, true);
+// }
+// 
+// // uses mouse to control camera
+// void mouse_callback(GLFWwindow* window, double xpos, double ypos)
+// {
+//     if (firstMouse)
+//     {
+//         lastX = xpos;
+//         lastY = ypos;
+//         firstMouse = false;
+//     }
+//   
+//     float xoffset = xpos - lastX;
+//     float yoffset = lastY - ypos; 
+//     lastX = xpos;
+//     lastY = ypos;
+// 
+//     float sensitivity = 0.1f;
+//     xoffset *= sensitivity;
+//     yoffset *= sensitivity;
+// 
+//     yaw   += xoffset;
+//     pitch += yoffset;
+// 
+//     if(pitch > 89.0f)
+//         pitch = 89.0f;
+//     if(pitch < -89.0f)
+//         pitch = -89.0f;
+// 
+//     glm::vec3 direction;
+//     direction.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
+//     direction.y = sin(glm::radians(pitch));
+//     direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
+//     cameraFront = glm::normalize(direction);
+// } 
 
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes
 // ---------------------------------------------------------------------------------------------

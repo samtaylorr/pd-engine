@@ -1,10 +1,6 @@
 #include "pd-engine/GameObject.h"
 #include <iostream>
 
-GameObject::GameObject(){
-  std::cout << "Creating GameObject";
-}
-
 void GameObject::AddComponent(Component *c){
   components.push_back(c);
 }
@@ -16,4 +12,16 @@ std::string GameObject::ListComponents(){
   }
 
   return list;
+}
+
+void GameObject::Awake(){
+  for(Component* c : components){
+    c->Awake();
+  }
+}
+
+void GameObject::Update(){
+  for(Component* c : components){
+    c->Update();
+  }
 }
