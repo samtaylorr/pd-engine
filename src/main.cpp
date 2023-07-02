@@ -56,7 +56,7 @@ GLFWwindow* InitWindow()
 
 		// Set callbacks
 		glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
-		//glfwSetCursorPosCallback(window, mouse_callback);
+		glfwSetCursorPosCallback(window, mouse_callback);
 		
 		// Disable cursor
 		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
@@ -87,76 +87,62 @@ int main( void )
         return -1;
     
     Level* mainLevel = new Level();
-    GameObject* mainCamera = new GameObject();
-    Component* camera = new Component("Camera");
+    GameObject* cube1 = new GameObject(glm::vec3(2.0f, 2.0f, -2.0f));
+		GameObject* cube2 = new GameObject(glm::vec3(0.0f, 0.0f, 0.0f));
     
-    mainCamera->AddComponent(camera);
-    mainLevel->AddGameObject(mainCamera);
+
+    mainLevel->AddGameObject(cube1);
+		mainLevel->AddGameObject(cube2);
 
     // This is where we run all of the Awake() functions
     mainLevel->Awake();
 
     float positions[] = {
-        -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-         0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
-         0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-         0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-        -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-
-        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-         0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-         0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-         0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-        -0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
-        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-
-        -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-        -0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-        -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-
-         0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-         0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-         0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-         0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-         0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-         0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-
-        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-         0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
-         0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-         0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-
-        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-         0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-         0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-         0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-        -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
-        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
-    };
+        -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,  // A 0
+        0.5f, -0.5f, -0.5f,  1.0f, 0.0f,  // B 1
+        0.5f,  0.5f, -0.5f,  1.0f, 1.0f,  // C 2
+        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,  // D 3
+        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,  // E 4
+        0.5f, -0.5f,  0.5f,  1.0f, 0.0f,   // F 5
+        0.5f,  0.5f,  0.5f,  1.0f, 1.0f,   // G 6
+        -0.5f,  0.5f,  0.5f,  0.0f, 1.0f,   // H 7
  
-    unsigned int indices[] = {
-        0, 1, 2,
-        2, 3, 0
-    };
+        -0.5f,  0.5f, -0.5f,  0.0f, 0.0f,  // D 8
+        -0.5f, -0.5f, -0.5f,  1.0f, 0.0f,  // A 9
+        -0.5f, -0.5f,  0.5f,  1.0f, 1.0f,  // E 10
+        -0.5f,  0.5f,  0.5f,  0.0f, 1.0f,  // H 11
+        0.5f, -0.5f, -0.5f,  0.0f, 0.0f,   // B 12
+        0.5f,  0.5f, -0.5f,  1.0f, 0.0f,   // C 13
+        0.5f,  0.5f,  0.5f,  1.0f, 1.0f,   // G 14
+        0.5f, -0.5f,  0.5f,  0.0f, 1.0f,   // F 15
+ 
+        -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,  // A 16
+        0.5f, -0.5f, -0.5f,  1.0f, 0.0f,   // B 17
+        0.5f, -0.5f,  0.5f,  1.0f, 1.0f,   // F 18
+        -0.5f, -0.5f,  0.5f,  0.0f, 1.0f,  // E 19
+        0.5f,  0.5f, -0.5f,   0.0f, 0.0f,  // C 20
+        -0.5f,  0.5f, -0.5f,  1.0f, 0.0f,  // D 21
+        -0.5f,  0.5f,  0.5f,  1.0f, 1.0f,  // H 22
+        0.5f,  0.5f,  0.5f,   0.0f, 1.0f,  // G 23
+    }; 
 
-		glm::vec3 cubePositions[] = {
-        glm::vec3( 0.0f,  0.0f,  0.0f),
-        glm::vec3( 2.0f,  5.0f, -15.0f),
-        glm::vec3(-1.5f, -2.2f, -2.5f),
-        glm::vec3(-3.8f, -2.0f, -12.3f),
-        glm::vec3( 2.4f, -0.4f, -3.5f),
-        glm::vec3(-1.7f,  3.0f, -7.5f),
-        glm::vec3( 1.3f, -2.0f, -2.5f),
-        glm::vec3( 1.5f,  2.0f, -2.5f),
-        glm::vec3( 1.5f,  0.2f, -1.5f),
-        glm::vec3(-1.3f,  1.0f, -1.5f)
-    };
+    unsigned int indices[] = {
+        // front and back
+        0, 3, 2,
+        2, 1, 0,
+        4, 5, 6,
+        6, 7 ,4,
+        // left and right
+        11, 8, 9,
+        9, 10, 11,
+        12, 13, 14,
+        14, 15, 12,
+        // bottom and top
+        16, 17, 18,
+        18, 19, 16,
+        20, 21, 22,
+        22, 23, 20
+    }; 	
 
     GLCall( glEnable(GL_BLEND) );
     GLCall( glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA) );
@@ -164,7 +150,7 @@ int main( void )
     {
         VertexArray va;
         VertexBuffer vb(positions, sizeof(positions));
-        IndexBuffer ib(indices, 6);
+        IndexBuffer ib(indices, 36);
 
         VertexBufferLayout layout;
         layout.AddFloat(3);
@@ -190,7 +176,7 @@ int main( void )
         		lastFrame = currentFrame;
 						
 						// Input
-						// processInput(window);
+						processInput(window);
 
 						GLCall( glClearColor(0.2f, 0.3f, 0.3, 1.0f) );
             renderer.Clear();
@@ -210,20 +196,12 @@ int main( void )
        		    cameraPos + cameraFront, // target
        		    cameraUp // up vector in world space for calculating right vector 
        		  );
+
        		  projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 			 		  shader.SetUniformMat4f("view", view);
-       		  shader.SetUniformMat4f("projection", projection);	
-
-						for(unsigned int i = 0; i < 10; i++){
-          		// calculate model for each object and pass it to shader 
-          		glm::mat4 model = glm::mat4(1.0f);
-          		model = glm::translate(model, cubePositions[i]);
-          		float angle = 20.0f * i;
-          		model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.05f));
-          		shader.SetUniformMat4f("model", model);
-          		renderer.Draw(va, ib, shader);
-        		}
-
+       		  shader.SetUniformMat4f("projection", projection);
+          	renderer.Draw(mainLevel, va, ib, shader);
+	
             // Swap buffers
             glfwSwapBuffers(window);
             glfwPollEvents();
@@ -238,67 +216,67 @@ int main( void )
 
 // process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
 // ---------------------------------------------------------------------------------------------------------
-// void processInput(GLFWwindow *window)
-// {
-//     const float speed = 2.5f * deltaTime;
-// 
-//     if(glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-//     {
-//       cameraPos += speed * cameraFront;
-//     }
-// 
-//     if(glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-//     {
-//       cameraPos -= speed * cameraFront;
-//     }
-// 
-//     if(glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-//     {
-//       cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * speed;
-//     }
-// 
-//     if(glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-//     {
-//       cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * speed;
-//     }
-// 
-//     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-//         glfwSetWindowShouldClose(window, true);
-// }
-// 
-// // uses mouse to control camera
-// void mouse_callback(GLFWwindow* window, double xpos, double ypos)
-// {
-//     if (firstMouse)
-//     {
-//         lastX = xpos;
-//         lastY = ypos;
-//         firstMouse = false;
-//     }
-//   
-//     float xoffset = xpos - lastX;
-//     float yoffset = lastY - ypos; 
-//     lastX = xpos;
-//     lastY = ypos;
-// 
-//     float sensitivity = 0.1f;
-//     xoffset *= sensitivity;
-//     yoffset *= sensitivity;
-// 
-//     yaw   += xoffset;
-//     pitch += yoffset;
-// 
-//     if(pitch > 89.0f)
-//         pitch = 89.0f;
-//     if(pitch < -89.0f)
-//         pitch = -89.0f;
-// 
-//     glm::vec3 direction;
-//     direction.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
-//     direction.y = sin(glm::radians(pitch));
-//     direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
-//     cameraFront = glm::normalize(direction);
-// } 
+void processInput(GLFWwindow *window)
+{
+    const float speed = 2.5f * deltaTime;
+
+    if(glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+    {
+      cameraPos += speed * cameraFront;
+    }
+
+    if(glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+    {
+      cameraPos -= speed * cameraFront;
+    }
+
+    if(glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+    {
+      cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * speed;
+    }
+
+    if(glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+    {
+      cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * speed;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+        glfwSetWindowShouldClose(window, true);
+}
+
+// uses mouse to control camera
+void mouse_callback(GLFWwindow* window, double xpos, double ypos)
+{
+    if (firstMouse)
+    {
+        lastX = xpos;
+        lastY = ypos;
+        firstMouse = false;
+    }
+  
+    float xoffset = xpos - lastX;
+    float yoffset = lastY - ypos; 
+    lastX = xpos;
+    lastY = ypos;
+
+    float sensitivity = 0.1f;
+    xoffset *= sensitivity;
+    yoffset *= sensitivity;
+
+    yaw   += xoffset;
+    pitch += yoffset;
+
+    if(pitch > 89.0f)
+        pitch = 89.0f;
+    if(pitch < -89.0f)
+        pitch = -89.0f;
+
+    glm::vec3 direction;
+    direction.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
+    direction.y = sin(glm::radians(pitch));
+    direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
+    cameraFront = glm::normalize(direction);
+} 
 
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes
 // ---------------------------------------------------------------------------------------------
