@@ -11,7 +11,7 @@
 #include "pd-engine/VertexArray.h"
 #include "pd-engine/IndexBuffer.h"
 #include "pd-engine/Texture.h"
-
+#include "pd-engine/Level.h"
 // Standard libraries
 #include <iostream>
 
@@ -100,6 +100,13 @@ int main( void )
     GLFWwindow* window = InitWindow();
     if (!window)
         return -1;
+    
+    Level* mainLevel = new Level();
+    GameObject* mainCamera = new GameObject();
+    Component* camera = new Component("Camera");
+    
+    mainCamera->AddComponent(camera);
+    mainLevel->AddGameObject(mainCamera);
 
     float positions[] = {
         -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
