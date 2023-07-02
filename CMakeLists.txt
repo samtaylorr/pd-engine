@@ -2,10 +2,11 @@ cmake_minimum_required(VERSION 3.17)
 
 project("pd-engine")
 
-file(GLOB MY_SOURCES "src/*.cpp" "src/*.h" "include/pd-engine/*.h" "lib/glad/src/glad.c")
+file(GLOB MY_SOURCES "src/*.cpp" "src/*.h" "include/pd-engine/*.h" "lib/glad/src/glad.c" "src/components/*.cpp" "include/pd-engine/components/*.h")
 add_executable("${PROJECT_NAME}" "${MY_SOURCES}")
 
 file(COPY "./resources" DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+file(COPY "./shaders" DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 
 # These are the options we select for building GLFW as a library
 set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)        # Don't build Documentation

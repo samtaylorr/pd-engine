@@ -1,26 +1,40 @@
-#ifndef SHADER_H
-#define SHADER_H
-
-#include <glm/glm.hpp>
-#include <glm/gtc/type_ptr.hpp>
-#include <glad/glad.h>
+#pragma once
 
 #include <string>
-#include <fstream>
-#include <sstream>
-#include <iostream>
+#include <unordered_map>
+#include <glm/ext.hpp>
+#include "Debug.h"
 
-class Shader 
+struct ShaderProgramSource
 {
-    public:
-      unsigned int ID;
-
-      Shader (const char* vertexPath, const char* fragmentPath);
-      void use();
-      void setBool(const std::string &name, bool value) const;
-      void setInt(const std::string &name, int value) const;
-      void setFloat(const std::string &name, float value) const;
-      void setMat4(const std::string &name, const glm::mat4 &mat) const;
+    std::string VertexSource;
+    std::string FragmentSource;
 };
 
-#endif
+class Shader
+{
+    private:
+        unsigned int m_RendererID;
+        std::string m_FilePath;
+        std::unordered_map<std::string, int> m_UniformLocationCache;
+
+    public:
+        Shader(const std::string& filepath);
+        ~Shader();
+
+        void Bind() const;
+        void Unbind() const;
+
+        // Set uniforms
+        void SetUniform1i(const std::string& name, int value);
+        void SetUniform1f(const std::string& name, float value);
+        void SetUniform4f(const std::string& name, float f0, float f1, float f2, float f3);
+        void SetUniformMat4f(const std::string& name, const glm::mat4& matrix);
+
+    private:
+        int GetUniformLocation(const std::string& name);
+        struct ShaderProgramSource ParseShader(const std::string& filepath);
+        unsigned int CompileShader(unsigned int type, const std::string& source);
+        unsigned int CreateShader(const std::string& vertexShader, const std::string& fragmentShader);
+
+};
