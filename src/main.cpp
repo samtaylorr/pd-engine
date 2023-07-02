@@ -171,14 +171,6 @@ int main( void )
         VertexBuffer vb(positions, sizeof(positions));
         IndexBuffer ib(indices, 6);
 
-        // projection matrix
-        glm::mat4 proj = glm::ortho(0.0f, 960.0f, 0.0f, 540.0f, -1.0f, 1.0f);
-
-        // view matrix
-        glm::mat4 ident = glm::mat4(1.0f);
-        glm::vec3 trvec = glm::vec3(-100, 0, 0);
-        glm::mat4 view = glm::translate(ident, trvec);
-
         VertexBufferLayout layout;
         layout.AddFloat(3);
         layout.AddFloat(2);
@@ -194,12 +186,7 @@ int main( void )
 				shader.SetUniform1i("texture1", 0);
 				shader.SetUniform1i("texture2", 1);
 
-        float red = 0.0f;
-        float step = 0.05f;
-
         Renderer renderer;
-
-        glm::vec3 translation(200, 200, 0);
 
         do {	
 						// Calculate time 
@@ -217,18 +204,15 @@ int main( void )
 						texture2.Bind(1);
 
 						// create transformations
-       		  glm::mat4 model         = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
        		  glm::mat4 view          = glm::mat4(1.0f);
        		  glm::mat4 projection    = glm::mat4(1.0f);
-       		  model = glm::rotate(model, (float)glfwGetTime() * glm::radians(50.0f), glm::vec3(0.5f, 1.0f, 0.0f));
-
-       		  view  = glm::lookAt(
+       		  
+            view  = glm::lookAt(
        		    cameraPos, //camera position
        		    cameraPos + cameraFront, // target
        		    cameraUp // up vector in world space for calculating right vector 
        		  );
        		  projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
-			 		  shader.SetUniformMat4f("model", model);
 			 		  shader.SetUniformMat4f("view", view);
        		  shader.SetUniformMat4f("projection", projection);	
 
@@ -239,17 +223,12 @@ int main( void )
           		float angle = 20.0f * i;
           		model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.05f));
           		shader.SetUniformMat4f("model", model);
-          		glDrawArrays(GL_TRIANGLES, 0, 36);
+          		renderer.Draw(va, ib, shader);
         		}
 
             // Swap buffers
             glfwSwapBuffers(window);
             glfwPollEvents();
-
-            // increment red
-            if (red < 0.0f || red > 1.0f)
-                step *= -1.0;
-            red += step;
 
         } while(!glfwWindowShouldClose(window)); 
     } 
