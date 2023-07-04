@@ -10,7 +10,7 @@ public:
   Component(const Component &) = default;
   Component &operator=(Component &&) = default;
   Component &operator=(const Component &) = default;
-  ~Component();
+  ~Component(){};
   void Awake(){};
   void Update(){};
 };

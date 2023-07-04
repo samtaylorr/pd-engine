@@ -89,7 +89,6 @@ int main( void )
     Level* mainLevel = new Level();
     GameObject* cube1 = new GameObject(glm::vec3(2.0f, 2.0f, -2.0f));
 		GameObject* cube2 = new GameObject(glm::vec3(0.0f, 0.0f, 0.0f));
-    
 
     mainLevel->AddGameObject(cube1);
 		mainLevel->AddGameObject(cube2);
@@ -148,27 +147,10 @@ int main( void )
     GLCall( glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA) );
 
     {
-        VertexArray va;
-        VertexBuffer vb(positions, sizeof(positions));
-        IndexBuffer ib(indices, 36);
-
-        VertexBufferLayout layout;
-        layout.AddFloat(3);
-        layout.AddFloat(2);
-
-        va.AddBuffer(vb, layout);
-
-        Shader shader("shaders/example/Basic.shader");
-        shader.Bind();
- 
-        Texture texture1("resources/container.jpg");
-				Texture texture2("resources/awesomeface.png");
-
-				shader.SetUniform1i("texture1", 0);
-				shader.SetUniform1i("texture2", 1);
-
-        Renderer renderer;
-
+        MeshRenderer *mesh = new MeshRenderer(positions, indices, sizeof(positions), 36);
+        cube2->AddComponent(mesh);
+        mesh->AttachTransform(cube2->transform);
+    
         do {	
 						// Calculate time 
 						float currentFrame = glfwGetTime();
@@ -179,29 +161,23 @@ int main( void )
 						processInput(window);
 
 						GLCall( glClearColor(0.2f, 0.3f, 0.3, 1.0f) );
-            renderer.Clear();
-
             // Update()
             mainLevel->Update();
 
-						texture1.Bind(0);
-						texture2.Bind(1);
-
-						// create transformations
-       		  glm::mat4 view          = glm::mat4(1.0f);
-       		  glm::mat4 projection    = glm::mat4(1.0f);
+            // create transformations
+            glm::mat4 view          = glm::mat4(1.0f);
+            glm::mat4 projection    = glm::mat4(1.0f);
        		  
             view  = glm::lookAt(
-       		    cameraPos, //camera position
-       		    cameraPos + cameraFront, // target
-       		    cameraUp // up vector in world space for calculating right vector 
-       		  );
+              cameraPos, //camera position
+              cameraPos + cameraFront, // target
+              cameraUp // up vector in world space for calculating right vector 
+            );
 
-       		  projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
-			 		  shader.SetUniformMat4f("view", view);
-       		  shader.SetUniformMat4f("projection", projection);
-          	renderer.Draw(mainLevel, va, ib, shader);
-	
+            projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+
+          	//renderer.Draw(mainLevel, va, ib, shader);
+            mesh->Draw(view, projection);
             // Swap buffers
             glfwSwapBuffers(window);
             glfwPollEvents();
