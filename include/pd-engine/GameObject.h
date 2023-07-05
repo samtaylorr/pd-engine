@@ -1,8 +1,11 @@
 #pragma once
-
 #include <string>
 #include <vector>
-#include "components/Transform.h"
+#include "components/MeshRenderer.h"
+#include "components/MeshFilter.h"
+#include "Space.h"
+
+class Level;
 
 class GameObject {
 public:
@@ -18,6 +21,10 @@ public:
   std::string ListComponents();
   void Awake();
   void Update();
+  void Draw();
+  MeshRenderer* renderer;
+  Level* level;
+
 private:
-  std::vector<Component*> components;
+  std::vector<Component*> components;  
 };
