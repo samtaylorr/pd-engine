@@ -10,7 +10,7 @@ VertexArray::~VertexArray()
     GLCall( glDeleteVertexArrays(1, &m_RendererID) );
 }
 
-void VertexArray::AddBuffer(const VertexBuffer& vb, const VertexBufferLayout& layout)
+void VertexArray::AddBuffer(const VertexBuffer& vb, const VertexBufferLayout& layout) const
 {
     Bind();
     vb.Bind();

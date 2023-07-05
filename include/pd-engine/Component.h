@@ -2,6 +2,9 @@
 
 #include <iostream>
 #include <string>
+#include "Transform.h"
+
+class GameObject;
 
 class Component {
 public:
@@ -10,8 +13,11 @@ public:
   Component(const Component &) = default;
   Component &operator=(Component &&) = default;
   Component &operator=(const Component &) = default;
-  ~Component();
-  void Awake(){};
-  void Update(){};
+  ~Component(){};
+  virtual void Awake(){};
+  virtual void Update(){};
+  void Attach(GameObject* g, Transform* t);
+  GameObject* gameObject;
+  Transform* transform;
 };
 

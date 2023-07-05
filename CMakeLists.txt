@@ -16,7 +16,6 @@ set(GLFW_INSTALL OFF CACHE BOOL "" FORCE)           # Don't build Installation I
 set(GLFW_USE_HYBRID_HPG ON CACHE BOOL "" FORCE)     # Add variables to use High Performance Graphics Card if available
 add_subdirectory(lib/glfw)                       # Build the GLFW project to use later as a library
 add_subdirectory(lib/glm)
-
 include_directories(
     lib/glfw/include
     lib/glad/include
@@ -24,4 +23,5 @@ include_directories(
     include/
 )
 
+target_compile_options(${PROJECT_NAME} PUBLIC -std=c++20)
 target_link_libraries(${PROJECT_NAME} glfw glm)

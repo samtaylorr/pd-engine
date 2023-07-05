@@ -88,88 +88,24 @@ int main( void )
     
     Level* mainLevel = new Level();
     GameObject* cube1 = new GameObject(glm::vec3(2.0f, 2.0f, -2.0f));
-		GameObject* cube2 = new GameObject(glm::vec3(0.0f, 0.0f, 0.0f));
-    
-
+		GameObject* cube2 = new GameObject(glm::vec3(0.0f, 0.0f, -1.0f));
+    GameObject* mainCamera = new GameObject(glm::vec3(0.0, 0.0, 3.0f));
+     
     mainLevel->AddGameObject(cube1);
 		mainLevel->AddGameObject(cube2);
+    mainLevel->AddGameObject(mainCamera);
+
+    Camera* camera = new Camera();
+    mainCamera->AddComponent(camera);
 
     // This is where we run all of the Awake() functions
     mainLevel->Awake();
-
-    float positions[] = {
-        -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,  // A 0
-        0.5f, -0.5f, -0.5f,  1.0f, 0.0f,  // B 1
-        0.5f,  0.5f, -0.5f,  1.0f, 1.0f,  // C 2
-        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,  // D 3
-        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,  // E 4
-        0.5f, -0.5f,  0.5f,  1.0f, 0.0f,   // F 5
-        0.5f,  0.5f,  0.5f,  1.0f, 1.0f,   // G 6
-        -0.5f,  0.5f,  0.5f,  0.0f, 1.0f,   // H 7
- 
-        -0.5f,  0.5f, -0.5f,  0.0f, 0.0f,  // D 8
-        -0.5f, -0.5f, -0.5f,  1.0f, 0.0f,  // A 9
-        -0.5f, -0.5f,  0.5f,  1.0f, 1.0f,  // E 10
-        -0.5f,  0.5f,  0.5f,  0.0f, 1.0f,  // H 11
-        0.5f, -0.5f, -0.5f,  0.0f, 0.0f,   // B 12
-        0.5f,  0.5f, -0.5f,  1.0f, 0.0f,   // C 13
-        0.5f,  0.5f,  0.5f,  1.0f, 1.0f,   // G 14
-        0.5f, -0.5f,  0.5f,  0.0f, 1.0f,   // F 15
- 
-        -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,  // A 16
-        0.5f, -0.5f, -0.5f,  1.0f, 0.0f,   // B 17
-        0.5f, -0.5f,  0.5f,  1.0f, 1.0f,   // F 18
-        -0.5f, -0.5f,  0.5f,  0.0f, 1.0f,  // E 19
-        0.5f,  0.5f, -0.5f,   0.0f, 0.0f,  // C 20
-        -0.5f,  0.5f, -0.5f,  1.0f, 0.0f,  // D 21
-        -0.5f,  0.5f,  0.5f,  1.0f, 1.0f,  // H 22
-        0.5f,  0.5f,  0.5f,   0.0f, 1.0f,  // G 23
-    }; 
-
-    unsigned int indices[] = {
-        // front and back
-        0, 3, 2,
-        2, 1, 0,
-        4, 5, 6,
-        6, 7 ,4,
-        // left and right
-        11, 8, 9,
-        9, 10, 11,
-        12, 13, 14,
-        14, 15, 12,
-        // bottom and top
-        16, 17, 18,
-        18, 19, 16,
-        20, 21, 22,
-        22, 23, 20
-    }; 	
 
     GLCall( glEnable(GL_BLEND) );
     GLCall( glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA) );
 
     {
-        VertexArray va;
-        VertexBuffer vb(positions, sizeof(positions));
-        IndexBuffer ib(indices, 36);
-
-        VertexBufferLayout layout;
-        layout.AddFloat(3);
-        layout.AddFloat(2);
-
-        va.AddBuffer(vb, layout);
-
-        Shader shader("shaders/example/Basic.shader");
-        shader.Bind();
- 
-        Texture texture1("resources/container.jpg");
-				Texture texture2("resources/awesomeface.png");
-
-				shader.SetUniform1i("texture1", 0);
-				shader.SetUniform1i("texture2", 1);
-
-        Renderer renderer;
-
-        do {	
+          do {	
 						// Calculate time 
 						float currentFrame = glfwGetTime();
         		deltaTime = currentFrame - lastFrame;
@@ -177,31 +113,15 @@ int main( void )
 						
 						// Input
 						processInput(window);
-
+            mainLevel->Clear();
+            
 						GLCall( glClearColor(0.2f, 0.3f, 0.3, 1.0f) );
-            renderer.Clear();
-
             // Update()
             mainLevel->Update();
 
-						texture1.Bind(0);
-						texture2.Bind(1);
-
-						// create transformations
-       		  glm::mat4 view          = glm::mat4(1.0f);
-       		  glm::mat4 projection    = glm::mat4(1.0f);
-       		  
-            view  = glm::lookAt(
-       		    cameraPos, //camera position
-       		    cameraPos + cameraFront, // target
-       		    cameraUp // up vector in world space for calculating right vector 
-       		  );
-
-       		  projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
-			 		  shader.SetUniformMat4f("view", view);
-       		  shader.SetUniformMat4f("projection", projection);
-          	renderer.Draw(mainLevel, va, ib, shader);
-	
+            //renderer.Draw(mainLevel, va, ib, shader);
+            cube1->Draw();
+            cube2->Draw(); 
             // Swap buffers
             glfwSwapBuffers(window);
             glfwPollEvents();
